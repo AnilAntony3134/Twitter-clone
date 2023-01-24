@@ -1,4 +1,1 @@
-# Twitter-clone
-New Twitter Clone App build using Apollo
-
- 
+# BizSol Is a hackathon project devloped for NITR Hackathon 4.0
