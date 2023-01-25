@@ -6,37 +6,91 @@ import Loader from '../Loader/Loader';
 import { getSolutions } from '../../store/actions/solutionActions';
 import './styles.css';
 import Solution from '../Solutions/Solution';
-import { Button } from '@nextui-org/react';
+import { Button, Checkbox, Modal, Switch } from '@nextui-org/react';
+import { useFormik } from 'formik';
+import DeclareWinnerModal from './DeclareWinnerModal';
 
 const Shortlisted = ({ getSolutions, solution: { solutions, isLoading, error }, auth: { me }, orgSolution }) => {
   useEffect(() => {
     getSolutions();
   }, []);
+
+  const updateselection = (solution) => {
+    console.log(solution, 'solution')
+    if (solution.selected) setSelected(...selected, solution)
+    else setSelected(selected.filter(e => e.id !== solution.id))
+    console.log(selected, 'selected')
+  }
+
+
+
   solutions = solutions.filter(e => e.message === orgSolution && e.shortlisted);
   const [itemoffset, setItemoffset] = useState(0);
   const selectedSolutions = solutions.filter(e => e.selected);
-  const [selected, setSelected] = useState(selectedSolutions);
+  const [selectWinner, setSelectWinners] = useState(false);
+  const [selected, setSelected] = useState([]);
+  const [openWinnerModal, setOpenWinnerModal] = useState(false);
   const itemsperpage = 6;
   const endooffset = itemoffset + itemsperpage;
   let currentItems = solutions.slice(itemoffset, endooffset)
   const pageCount = solutions.length / itemsperpage;
 
+  console.log(selectWinner, 'selectwinner')
+
   const handlePageClick = (event) => {
     const newOffset = (event.selected * 6) % solutions.length
     setItemoffset(newOffset)
   }
+
+  const closeHandler = () => setOpenWinnerModal(false);
+
   return (
     <div className="message-list">
       {error && <div className="error-center">{error}</div>}
       <div className="list">
+      <Modal
+                closeButton
+                aria-labelledby="modal-title"
+                open={openWinnerModal}
+                onClose={closeHandler}
+                width="40vw"
+            >
+                {/* <ModalForm closeHandler={closeHandler}/> */}
+                <DeclareWinnerModal />
+            </Modal>
         {isLoading ? (
           <Loader />
         ) : (
-          <>
-          <div style={{display: 'flex', justifyContent: 'center'}}>
-            {selected && selected.length==0 && <Button color='success' > Declare Winners </Button>}
-          </div>
-            {currentItems.map((solution, index) => <Solution key={index} solution={solution} shortlist={true} selected={selected} setSelected={setSelected}/>)}
+          <div>
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
+              <div style={{display:'flex', alignItems:'center'}}>
+                <Switch checked={selectWinner} onChange={() => setSelectWinners(prev => !prev)} />
+                <h2>Select Winners</h2>
+              </div>
+              {selected.length ? <Button color='success' onPress={() => setOpenWinnerModal(true)}> Declare Winners </Button> : ''}
+            </div>
+            <div>
+              {
+                selectWinner ? (
+                  <Checkbox.Group
+                    orientation='vertical'
+                    color='secondary'
+                    value={selected}
+                    onChange={setSelected}
+                    css={{ width: '100%' }}
+                  >
+                    {currentItems.map((solution, index) => (
+                      <Checkbox key={index} value={solution.id}>
+                        {console.log(solution, 'inside maps')}
+                        <Solution solution={solution} shortlist={true} updateselection={updateselection} />
+                      </Checkbox>
+
+                    ))}
+                  </Checkbox.Group>
+                ) : currentItems.map((solution, index) => <Solution key={index} solution={solution} />)
+              }
+
+            </div>
             {
               solutions.length >= 6 && (
                 <ReactPaginate
@@ -52,7 +106,7 @@ const Shortlisted = ({ getSolutions, solution: { solutions, isLoading, error }, 
                 />
               )
             }
-          </>
+          </div>
         )}
       </div>
     </div>

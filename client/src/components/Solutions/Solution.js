@@ -11,7 +11,7 @@ import './styles.css';
 import { Avatar, Button, Grid, Input, Spacer, Text, Textarea } from '@nextui-org/react';
 import { ReactMarkdown } from 'react-markdown/lib/react-markdown';
 
-const Solution = ({ solution, auth, user, deleteSolution, editSolution, clearSolutionError, shortlist, selected, setSelected }) => {
+const Solution = ({ solution, auth, user, deleteSolution, editSolution, clearSolutionError, shortlist }) => {
     const notify = () => toast('Here is your toast.');
     const [isEdit, setIsEdit] = useState(false);
     const handleDelete = (e, id) => {
@@ -35,15 +35,6 @@ const Solution = ({ solution, auth, user, deleteSolution, editSolution, clearSol
         if (!window.confirm(`Confirm ${solution.shortlisted ? 'remove shortlist' : 'shortlist'}?`)) return;
         const { id } = solution
         editSolution(solution.id, { title: solution.title, solution: solution.solution, message: solution.message, organisation: solution.organisation, user: solution.user.id, shortlisted: !solution.shortlisted,  selected: solution.selected  });
-    }
-
-    const handleSelection = (e) => {
-        e.preventDefault();
-        if (!window.confirm(`Confirm ${solution.selected ? 'remove from selection' : 'selection'}?`)) return;
-        // editSolution(id, {...solution, shortlisted: true, selected: false, user: solution.user.id});
-        editSolution(solution.id, { title: solution.title, solution: solution.solution, message: solution.message, organisation: solution.organisation, user: solution.user.id, shortlisted: solution.shortlisted, selected: !solution.selected });
-        if (solution.selected)  setSelected(...selected, solution)
-        else setSelected(selected.filter(e => e.id !== solution.id))
     }
 
     const formik = useFormik({
@@ -72,7 +63,7 @@ const Solution = ({ solution, auth, user, deleteSolution, editSolution, clearSol
     }, [solution.error]);
 
     return (
-        <div className={solution.isLoading ? 'solution loader' : 'solution'} style={{ borderBottom: '1px solid black', paddingBottom: '40px' }}>
+        <div className={solution.isLoading ? 'solution loader' : 'solution'} style={{ borderBottom: '1px solid black', paddingBottom: '40px'}}>
 
             <form onSubmit={formik.handleSubmit}>
                 {isEdit ? (
@@ -115,7 +106,9 @@ const Solution = ({ solution, auth, user, deleteSolution, editSolution, clearSol
                 ) : (
                     <>
                         <h2>{solution.title}</h2>
-                        <ReactMarkdown>{solution.solution.substring(0, 100)}</ReactMarkdown>
+                        {
+                            !shortlist && <ReactMarkdown>{solution.solution.substring(0, 100)}</ReactMarkdown>
+                        }
 
                         <p>{solution.category}</p>
                     </>
@@ -170,15 +163,6 @@ const Solution = ({ solution, auth, user, deleteSolution, editSolution, clearSol
 
                     </>
                 )}
-                      {
-                    shortlist && (
-                        <button className="btn" disabled={solution.isLoading} onClick={(e) => handleSelection(e)} style={{ backgroundColor: `${solution.selected ? 'red' : 'green'}`, color: 'white', cursor: 'pointer' }}>
-                            {solution.selected ? 'DeSelect' : 'Select'}
-                        </button>
-
-                    )
-                }
-
                 {
                     auth?.me.organisation?.flag && (
                         <button className="btn" disabled={solution.isLoading} onClick={(e) => handleShortlist(e)} style={{ backgroundColor: '#4040d4', color: 'white', cursor: 'pointer' }}>
