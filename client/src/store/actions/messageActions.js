@@ -17,6 +17,7 @@ import {
   EDIT_MESSAGE_FAIL,
   CLEAR_MESSAGE_ERROR,
 } from '../types';
+import { toast } from 'react-hot-toast';
 
 export const getMessages = () => async (dispatch, getState) => {
   dispatch({
@@ -118,6 +119,7 @@ export const editMessage = (id, formData) => async (dispatch, getState) => {
       type: EDIT_MESSAGE_SUCCESS,
       payload: { message: response.data.message },
     });
+    toast.success('Successfully created!');
   } catch (err) {
     dispatch({
       type: EDIT_MESSAGE_FAIL,

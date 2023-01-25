@@ -15,10 +15,11 @@ const SolutionForm = ({ addMessage, addSolution, message: { messages }, setAddMe
     },
     validationSchema: solutionFormSchema,
     onSubmit: (values, { resetForm }) => {
+      console.log(messages.find(e => e.id === messageId)?.user,'forgot to console');
       addSolution({title: values.title, solution: values.text, message: messageId, organisation: messages.find(e => e.id === messageId)?.user?.id, user: me.id });
       resetForm();
-      setTab(1);
       setAddMessage(false);
+      setTab(1);
     },
   });
 

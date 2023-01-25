@@ -3,7 +3,6 @@ import React from 'react'
 import MessageForm from '../../components/MessageForm/MessageForm';
 
 const ModalForm = ({closeHandler, isEdit, currMessage}) => {
-    console.log(currMessage)
     return (
         <div>
             <div>

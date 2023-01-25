@@ -86,15 +86,17 @@ const MessageOne = ({
         },
     });
 
+    console.log(me,'profileee')
+
     return (
-        <Layout style={{margin: '0px'}}>
-            <div className="profile" style={{display: 'flex', flexDirection: 'column', justifyContent: 'center'}}>
-            <Link to='/'>
-            <div style={{display: 'flex', alignItems: 'center'}}>
-            <BsFillBackspaceFill/>
-               <span style={{marginLeft: '5px'}}> Back</span> 
-            </div>
-            </Link>
+        <Layout style={{ margin: '0px' }}>
+            <div className="profile" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                <Link to='/'>
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                        <BsFillBackspaceFill />
+                        <span style={{ marginLeft: '5px' }}> Back</span>
+                    </div>
+                </Link>
                 <h1>{messages?.[0]?.title}</h1>
                 <div style={{ display: 'flex', marginTop: '-25px', justifyContent: 'space-between' }}>
                     <Grid css={{ display: 'flex' }}>
@@ -116,14 +118,14 @@ const MessageOne = ({
                         </Grid>
                     </Grid>
                     <Grid>
-                        <Text>Difficulty: <Badge css={{border: 'none'}} color={messages?.[0]?.difficulty === 'easy' ? 'success' : 'warning'}>{messages?.[0]?.difficulty.toUpperCase()}</Badge> </Text>
+                        <Text>Difficulty: <Badge css={{ border: 'none' }} color={messages?.[0]?.difficulty === 'easy' ? 'success' : 'warning'}>{messages?.[0]?.difficulty.toUpperCase()}</Badge> </Text>
                     </Grid>
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'center' }}>
                     <div style={{ display: 'flex', backgroundColor: 'white', padding: '10px 20px', margin: '20px 0px', borderRadius: '10px', cursor: 'pointer' }}>
                         <div className={`tabs-messageOne-ind ${tab === 0 ? 'active-one' : ''}`} onClick={() => setTab(0)}>Overview</div>
-                        <div className={`tabs-messageOne-ind ${tab === 1 ? 'active-one' : ''}`} onClick={() => setTab(1)}>{!profile?.organisation?.flag ? 'Solutions' : 'Add Solution'}</div>
-                        <div className={`tabs-messageOne-ind ${tab === 2 ? 'active-one' : ''}`} onClick={() => setTab(2)}>Shortlisted</div>
+                        <div className={`tabs-messageOne-ind ${tab === 1 ? 'active-one' : ''}`} onClick={() => setTab(1)}>{me?.organisation?.flag ? 'All Solutions' : 'Solution'}</div>
+                        <div className={`tabs-messageOne-ind ${tab === 2 ? 'active-one' : ''}`} onClick={() => setTab(2)}>{me?.organisation?.flag ? 'Shortlisted' : 'Give Solution'}</div>
                     </div>
                 </div>
                 {
@@ -134,14 +136,18 @@ const MessageOne = ({
                     )
                 }
                 {
-                    tab === 1 && !profile.organisation?.flag && (
-                        <Solutionlist />
+                    tab === 1 && (
+                        <Solutionlist orgSolution={messages?.[0]?.id}/>
                     )
                 }     {
-                    tab === 2 && (
-                        // <Shortlisted />
-                        <SolutionForm messageId={messages?.[0]?.id} setTab={setTab}/>
+                    tab === 2 && me?.organisation?.flag && (
+                        <Shortlisted orgSolution={messages?.[0]?.id}/>
+                    ) }
+                    {
+                    tab === 2 && !me?.organisation?.flag && (
+                        <SolutionForm messageId={messages?.[0]?.id} setTab={setTab} />
                     )
+
                 }
                 {error && <p className="error">{error}</p>}
                 {/* {(

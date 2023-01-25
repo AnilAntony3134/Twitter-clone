@@ -1,5 +1,5 @@
 import axios from 'axios';
-
+import toast from "react-hot-toast";
 import { getMessages } from './messageActions';
 import {
   LOGIN_WITH_OAUTH_LOADING,
@@ -23,7 +23,7 @@ export const loadMe = () => async (dispatch, getState) => {
   try {
     const options = attachTokenToHeaders(getState);
     const response = await axios.get('http://localhost:80/api/users/me', options);
-    console.log(response);
+    toast.success("Welcome to the bisol!");
     dispatch({
       type: ME_SUCCESS,
       payload: { me: response.data.me },

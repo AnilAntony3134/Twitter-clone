@@ -16,6 +16,7 @@ import {
   EDIT_SOLUTION_FAIL,
   CLEAR_SOLUTION_ERROR,
 } from '../types';
+import { toast } from 'react-hot-toast';
 
 export const getSolutions = () => async (dispatch, getState) => {
   dispatch({
@@ -79,6 +80,7 @@ export const deleteSolution = (id) => async (dispatch, getState) => {
 };
 
 export const editSolution = (id, formData) => async (dispatch, getState) => {
+  console.log(id,'edit solution id',formData);
   dispatch({
     type: EDIT_SOLUTION_LOADING,
     payload: { id },
@@ -91,6 +93,7 @@ export const editSolution = (id, formData) => async (dispatch, getState) => {
       type: EDIT_SOLUTION_SUCCESS,
       payload: { message: response.data.message },
     });
+    toast.success('Successfully created!');
   } catch (err) {
     dispatch({
       type: EDIT_SOLUTION_FAIL,

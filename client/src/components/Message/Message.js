@@ -24,8 +24,8 @@ const Message = ({ message, auth, deleteMessage, editMessage, clearMessageError 
 
   const handleDelete = (e, id) => {
     e.preventDefault();
-     // eslint-disable-next-line no-restricted-globals
-    if(!window.confirm("Are you sure you want to delete?")) return;
+    // eslint-disable-next-line no-restricted-globals
+    if (!window.confirm("Are you sure you want to delete?")) return;
     if (!isEdit) {
       deleteMessage(id);
     }
@@ -61,7 +61,7 @@ const Message = ({ message, auth, deleteMessage, editMessage, clearMessageError 
     validationSchema: messageFormSchema,
     onSubmit: (values, { resetForm }) => {
       console.log(values, 'submit has been called')
-      editMessage(values.id, {title: values.title, text: values.text, incentive: values.incentive, category: selected, public: selectPublic, difficulty: selectedDifficulty });
+      editMessage(values.id, { title: values.title, text: values.text, incentive: values.incentive, category: selected, public: selectPublic, difficulty: selectedDifficulty });
       closeHandler();
       setPage(1);
       // resetForm();
@@ -100,7 +100,7 @@ const Message = ({ message, auth, deleteMessage, editMessage, clearMessageError 
               </Text>
             </Modal.Header>
             <Spacer y={1} />
-            <h2 style={{textAlign: 'left', marginBottom: '10px'}}>Modify your Thread</h2>
+            <h2 style={{ textAlign: 'left', marginBottom: '10px' }}>Modify your Thread</h2>
             <Spacer y={1} />
 
             {
@@ -133,7 +133,7 @@ const Message = ({ message, auth, deleteMessage, editMessage, clearMessageError 
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     value={formik.values.text}
-                    // disabled={message.isLoading}
+                  // disabled={message.isLoading}
                   />
                   <input type="hidden" name="id" />
                   {(formik.touched.text && formik.errors.text) || message.error ? (
@@ -249,13 +249,13 @@ const Message = ({ message, auth, deleteMessage, editMessage, clearMessageError 
           <h2 style={{ maxWidth: '70%' }}>{message?.title?.substring(0, 100)}</h2>
           <h3>{message.incentive ? `₹ ${message.incentive}` : 'undisclosed'}</h3>
         </div>
-      <ReactMarkdown>
-        {`${message.text.substring(0,150)} .....`}
-      </ReactMarkdown>
+        <ReactMarkdown>
+          {`${message.text.substring(0, 150)} .....`}
+        </ReactMarkdown>
         {/* <Spacer y={1}/> */}
         {
           message?.category?.map(e => (
-            <Badge size='sm' color='primary' variant="flat" style={{border: '0', cursor: 'pointer', margin: '10px 10px 10px 0px', padding: '8px'}}>{e}</Badge>
+            <Badge size='sm' color='primary' variant="flat" style={{ border: '0', cursor: 'pointer', margin: '10px 10px 10px 0px', padding: '8px' }}>{e}</Badge>
           ))
         }
       </>
@@ -270,19 +270,15 @@ const Message = ({ message, auth, deleteMessage, editMessage, clearMessageError 
           </Link>
           <span className="time text-light">{moment(message.createdAt).fromNow()}</span>
         </div>
-      {console.log(message.id)}
+        {console.log(message.id)}
       </div>
-      {
-        !auth.me.organisation?.flag && (
-          <>
-          <Link to={`/message/${message.id}`}>
-            <div className="btn" style={{ backgroundColor: '#4040d4', color: 'white', cursor: 'pointer' }}>
-              Give Solution
-            </div>
-          </Link>
-          </>
-        )
-      }
+      <>
+        <Link to={`/message/${message.id}`}>
+          <div className="btn" style={{ backgroundColor: '#4040d4', color: 'white', cursor: 'pointer' }}>
+            {auth.me.organisation.flag ? 'Preview' : 'Give Solution'}
+          </div>
+        </Link>
+      </>
       {auth.isAuthenticated && (auth.me.id === message.user.id || auth.me.role === 'ADMIN') && (
         <>
           {!isEdit && (

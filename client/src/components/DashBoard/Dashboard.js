@@ -19,7 +19,7 @@ const Dashboard = ({ auth }) => {
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems:'center'}}>
                     <h1>Dash<span style={{ color: '#4040d4' }}>Board</span></h1>
                     {
-                        auth.me.organisation && (
+                        auth.me.organisation?.flag && (
                             <Button className='bg-indigo-700 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded' style={{ width: '200px', backgroundColor: '#4040d4' }} onClick={() => setIsAddMessage(!isaddMessage)}>{isaddMessage ? 'Hide Write Message' : 'New Issue'}</Button>
                         )
                     }
