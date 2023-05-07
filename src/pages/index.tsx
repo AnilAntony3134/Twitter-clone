@@ -1,9 +1,26 @@
-import { SignInButton, SignOutButton, useUser } from "@clerk/nextjs";
+import { SignInButton, useUser } from "@clerk/nextjs";
 import { type NextPage } from "next";
 import Head from "next/head";
-import Link from "next/link";
 
 import { api } from "~/utils/api";
+
+const CreatePostWizard = () => {
+  const { user } = useUser()
+  
+  if(!user) return null;
+
+  return (
+    <div className="flex">
+       {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={user.profileImageUrl}
+        alt="Profile image"
+        className="h-14 w-14 rounded-full"
+        />
+    </div>
+  )
+
+}
 
 const Home: NextPage = () => {
   const {data} = api.post.getAll.useQuery();
@@ -19,7 +36,7 @@ const Home: NextPage = () => {
       <main className="flex min-h-screen flex-col items-center justify-center">
         <div>
           {!user.isSignedIn && <SignInButton/>}
-          {!!user.isSignedIn && <SignOutButton/>}
+          {!!user.isSignedIn && <CreatePostWizard/>}
         </div>
       </main>
     </>
