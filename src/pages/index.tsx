@@ -5,13 +5,14 @@ import Head from "next/head";
 import Image from "next/image";
 import { type RouterOutputs, api } from "~/utils/api";
 import relativeTime from 'dayjs/plugin/relativeTime';
+import { LoadingPage } from "~/Components/loading";
 
 dayjs.extend(relativeTime);
 
 const CreatePostWizard = () => {
   const { user } = useUser()
 
-  if (!user) return null;
+  if (!user) return null
 
   return (
     <div className="flex w-full gap-3">
@@ -55,7 +56,7 @@ const Home: NextPage = () => {
   const { data, isLoading } = api.post.getAll.useQuery();
   const user = useUser()
 
-  if (isLoading) return <div>Loading...</div>
+  if (isLoading) return <LoadingPage/>
 
   if (!data) return <div>Something went wrong</div>
 
@@ -85,7 +86,7 @@ const Home: NextPage = () => {
         </div>
       </main>
     </>
-  );
-};
+  )
+}
 
-export default Home;
+export default Home
