@@ -5,7 +5,8 @@ import Head from "next/head";
 import Image from "next/image";
 import { type RouterOutputs, api } from "~/utils/api";
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { LoadingPage } from "~/Components/loading";
+import { LoadingPage } from "../Components/Loading";
+import { useState } from "react";
 
 dayjs.extend(relativeTime);
 
@@ -13,6 +14,10 @@ const CreatePostWizard = () => {
   const { user } = useUser()
 
   if (!user) return null
+
+  const { mutate } = api.post.create.useMutation();
+
+  const [input, setInput] = useState("");
 
   return (
     <div className="flex w-full gap-3">
@@ -23,7 +28,7 @@ const CreatePostWizard = () => {
         height={56}
         className="h-14 w-14 rounded-full"
       />
-      <input placeholder="Type Your tweet" className="grow bg-transparent outline-none" />
+      <input placeholder="Type Your tweet" className="grow bg-transparent outline-none" value={input} onChange={(e)=> setInput(e.target.value)}/>
     </div>
   )
 
