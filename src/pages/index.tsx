@@ -12,12 +12,12 @@ dayjs.extend(relativeTime);
 
 const CreatePostWizard = () => {
   const { user } = useUser()
+  const [input, setInput] = useState("");
 
   if (!user) return null
 
   const { mutate } = api.post.create.useMutation();
 
-  const [input, setInput] = useState("");
 
   return (
     <div className="flex w-full gap-3">
@@ -29,6 +29,7 @@ const CreatePostWizard = () => {
         className="h-14 w-14 rounded-full"
       />
       <input placeholder="Type Your tweet" className="grow bg-transparent outline-none" value={input} onChange={(e)=> setInput(e.target.value)}/>
+      <button onClick={()=> mutate({content: input})}>Post</button>
     </div>
   )
 
@@ -65,7 +66,7 @@ const Feed = () => {
 
   return (
     <div className="flex flex-col">
-      {[...data, ...data]?.map((fullPost) => (
+      {data.map((fullPost) => (
         <PostView {...fullPost} key={fullPost.post.id} />
       ))}
     </div>
