@@ -3,10 +3,10 @@ import { type NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
 import {  api } from "~/utils/api";
-import { LoadingPage, LoadingSpinner } from "../Components/Loading";
+import { LoadingPage, LoadingSpinner } from "~/Components/loading";
 import { useState } from "react";
 import { toast } from "react-hot-toast";
-import { PageLayout } from "~/Components/Layout";
+import { PageLayout } from "~/Components/layout";
 import { PostView } from "~/Components/postView";
 
 const CreatePostWizard = () => {
