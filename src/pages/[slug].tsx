@@ -5,7 +5,7 @@ import { api } from "~/utils/api";
 import Image from "next/image";
 import { PostView } from "~/Components/postView";
 import { generateSSGHelper } from "~/server/api/helpers/ssgHelper";
-import { LoadingPage } from "~/Components/loading";
+import { LoadingPage } from "../Components/loading";
 import { PageLayout } from "../Components/layout";
 
 const ProfileFeed = (props: {userId: string}) => {
