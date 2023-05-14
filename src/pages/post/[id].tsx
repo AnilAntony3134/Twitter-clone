@@ -2,31 +2,9 @@ import { useUser } from "@clerk/nextjs";
 import type {GetStaticProps, NextPage } from "next";
 import Head from "next/head";
 import { api } from "~/utils/api";
-import Image from "next/image";
 import { PostView } from "~/Components/postView";
 import { generateSSGHelper } from "~/server/api/helpers/ssgHelper";
-import { LoadingPage } from "~/Components/loading";
 import { PageLayout } from "../../Components/layout";
-
-const ProfileFeed = (props: {userId: string}) => {
-    const {data, isLoading} = api.posts.getPostsByUserId.useQuery({
-        userId: props.userId
-    });
-
-    if (isLoading) return <LoadingPage/>
-
-    if(!data || data.length == 0) return <div>User Has not posted</div>
-
-    return(
-        <div className="flex flex-col">
-            {data.map((fullPost)=> (
-                <PostView {...fullPost} key={fullPost.post.id}/>
-            ))}
-        </div>
-    )
-
-}
-
 
 const ProfilePage: NextPage<{id: string}> = ({id}) => {
   const { isLoaded: userLoaded } = useUser()
