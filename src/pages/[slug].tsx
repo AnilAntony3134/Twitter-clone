@@ -8,6 +8,27 @@ import { createServerSideHelpers } from '@trpc/react-query/server';
 import { prisma } from "~/server/db";
 import { PageLayout } from "~/Components/Layout";
 import Image from "next/image";
+import { LoadingPage } from "../Components/Loading";
+import { PostView } from "~/Components/postView";
+
+const ProfileFeed = (props: {userId: string}) => {
+    const {data, isLoading} = api.posts.getPostsByUserId.useQuery({
+        userId: props.userId
+    });
+
+    if (isLoading) return <LoadingPage/>
+
+    if(!data || data.length == 0) return <div>User Has not posted</div>
+
+    return(
+        <div className="flex flex-col">
+            {data.map((fullPost)=> (
+                <PostView {...fullPost} key={fullPost.post.id}/>
+            ))}
+        </div>
+    )
+
+}
 
 
 const ProfilePage: NextPage<{userName: string}> = ({userName}) => {
@@ -42,6 +63,7 @@ const ProfilePage: NextPage<{userName: string}> = ({userName}) => {
         <div className="h-[64px]"></div>
         <div className="p-4 text-2xl font-bold">{`@${data.userName ?? ""}`}</div>  
         <div className="border-b border-slate-400 w-full"/>  
+        <ProfileFeed userId={data.id}/>
 
       </PageLayout>
     </>
