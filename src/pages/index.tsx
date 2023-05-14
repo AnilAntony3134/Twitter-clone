@@ -5,8 +5,9 @@ import Head from "next/head";
 import Image from "next/image";
 import { type RouterOutputs, api } from "~/utils/api";
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { LoadingPage } from "../Components/Loading";
+import { LoadingPage, LoadingSpinner } from "../Components/Loading";
 import { useState } from "react";
+import { toast } from "react-hot-toast";
 
 dayjs.extend(relativeTime);
 
@@ -14,9 +15,25 @@ const CreatePostWizard = () => {
   const { user } = useUser()
   const [input, setInput] = useState("");
 
+  const ctx = api.useContext()
+
   if (!user) return null
 
-  const { mutate } = api.post.create.useMutation();
+  const { mutate, isLoading: isPosting } = api.posts.create.useMutation({
+    onSuccess: () => {
+      setInput("");
+      void ctx.posts.getAll.invalidate();
+    },
+    onError: (e)=> {
+      const errorMessage = e.data?.zodError?.fieldErrors?.content;
+      if(errorMessage && errorMessage[0]){
+        toast.error(errorMessage[0]);
+      }
+      else{
+        toast.error("Failed to post, please try again later")
+      }
+    }
+  });
 
 
   return (
@@ -28,14 +45,39 @@ const CreatePostWizard = () => {
         height={56}
         className="h-14 w-14 rounded-full"
       />
-      <input placeholder="Type Your tweet" className="grow bg-transparent outline-none" value={input} onChange={(e)=> setInput(e.target.value)}/>
-      <button onClick={()=> mutate({content: input})}>Post</button>
+      <input 
+        placeholder="Type Your tweet" 
+        className="grow bg-transparent outline-none" 
+        value={input} 
+        onChange={(e) => setInput(e.target.value)}
+        onKeyDown={(e) => {
+          if(e.key === "Enter"){
+            e.preventDefault();
+            if(input !== ""){
+              mutate({content: input})
+            }
+          }
+        }} 
+      />
+      {input && !isPosting && (
+          <button 
+            className={"bg-blue-500 hover:bg-blue-600 active:bg-violet-700 focus:outline-none focus:ring focus:ring-violet-300 rounded-md px-6 "} 
+            onClick={() => mutate({ content: input })}
+          >
+              Post
+          </button>
+      )}
+      {isPosting && (
+        <div className="flex items-center justify-center">
+          <LoadingSpinner size={20}/>
+        </div>
+      )}
     </div>
   )
 
 }
 
-type PostWithUser = RouterOutputs['post']['getAll'][number];
+type PostWithUser = RouterOutputs['posts']['getAll'][number];
 const PostView = (props: PostWithUser) => {
   const { post, author } = props;
   return (
@@ -59,7 +101,7 @@ const PostView = (props: PostWithUser) => {
 }
 
 const Feed = () => {
-  const { data, isLoading: postsLoading } = api.post.getAll.useQuery();
+  const { data, isLoading: postsLoading } = api.posts.getAll.useQuery();
   if (postsLoading) return <LoadingPage />
 
   if (!data) return <div>Something went wrong</div>
@@ -74,10 +116,10 @@ const Feed = () => {
 }
 
 const Home: NextPage = () => {
-  const {user, isLoaded: userLoaded, isSignedIn} = useUser()
+  const { isLoaded: userLoaded, isSignedIn } = useUser()
 
   //start fetching a.s.a.p
-  api.post.getAll.useQuery();
+  api.posts.getAll.useQuery();
 
   if (!userLoaded) return <div />
 
