@@ -2,7 +2,7 @@ import { useUser } from "@clerk/nextjs";
 import type {GetStaticProps, NextPage } from "next";
 import Head from "next/head";
 import { api } from "~/utils/api";
-import { PostView } from "~/components/postView";
+import { PostView } from "../../components/postView";
 import { generateSSGHelper } from "~/server/api/helpers/ssgHelper";
 import { PageLayout } from "../../components/layout";
 
