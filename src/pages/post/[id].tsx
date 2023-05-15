@@ -2,9 +2,9 @@ import { useUser } from "@clerk/nextjs";
 import type {GetStaticProps, NextPage } from "next";
 import Head from "next/head";
 import { api } from "~/utils/api";
-import { PostView } from "~/Components/postView";
+import { PostView } from "~/components/postView";
 import { generateSSGHelper } from "~/server/api/helpers/ssgHelper";
-import { PageLayout } from "../../Components/layout";
+import { PageLayout } from "../../components/layout";
 
 const ProfilePage: NextPage<{id: string}> = ({id}) => {
   const { isLoaded: userLoaded } = useUser()
