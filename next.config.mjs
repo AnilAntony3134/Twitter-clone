@@ -6,6 +6,10 @@ await import("./src/env.mjs");
 
 /** @type {import("next").NextConfig} */
 const config = {
+  webpack: (config) => {
+    config.resolve.alias["~"] = __dirname;
+    return config;
+  },
   reactStrictMode: true,
 
   images: {
