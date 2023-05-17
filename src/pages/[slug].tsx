@@ -4,7 +4,7 @@ import Head from "next/head";
 import { api } from "~/utils/api";
 import Image from "next/image";
 import { generateSSGHelper } from "~/server/api/helpers/ssgHelper";
-import { LoadingPage } from "~/components/loading";
+import { LoadingPage } from "../components/loading";
 import { PageLayout } from "../components/layout";
 import { PostView } from "../components/postView";
 
