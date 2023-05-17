@@ -3,7 +3,7 @@ import { type NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
 import {  api } from "~/utils/api";
-import { LoadingPage, LoadingSpinner } from "../components/loading";
+import { LoadingPage, LoadingSpinner } from "~/components/Loading";
 import { useState } from "react";
 import { toast } from "react-hot-toast";
 import { PageLayout } from "../components/layout";
