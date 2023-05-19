@@ -36,7 +36,7 @@ const CreatePostWizard = () => {
 
 
   return (
-    <div className="flex w-full gap-3">
+    <div className="border-b border-slate-400 p-8 flex align-middle">
       <Image
         src={user.profileImageUrl}
         alt="Profile image"
@@ -78,12 +78,15 @@ const CreatePostWizard = () => {
 
 const Feed = () => {
   const { data, isLoading: postsLoading } = api.posts.getAll.useQuery();
+  const { isLoaded: userLoaded, isSignedIn } = useUser()
   if (postsLoading) return <LoadingPage />
 
   if (!data) return <div>Something went wrong</div>
+  if (!userLoaded) return <div />
 
   return (
     <div className="flex flex-col">
+      {isSignedIn && <CreatePostWizard />}
       {data.map((fullPost) => (
         <PostView {...fullPost} key={fullPost.post.id} />
       ))}
@@ -92,13 +95,8 @@ const Feed = () => {
 }
 
 const Home: NextPage = () => {
-  const { isLoaded: userLoaded, isSignedIn } = useUser()
-
   //start fetching a.s.a.p
   api.posts.getAll.useQuery();
-
-  if (!userLoaded) return <div />
-
 
   return (
     <>
@@ -108,14 +106,6 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
         <NavBar/>
-        <div className="flex border-b border-slate-400 p-4">
-          {!isSignedIn && (
-            <div className="flex justify-center">
-              <SignInButton />
-            </div>
-          )}
-          {isSignedIn && <CreatePostWizard />}
-        </div>
       <PageLayout>
       <Feed />
       </PageLayout>
