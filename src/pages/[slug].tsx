@@ -6,7 +6,7 @@ import Image from "next/image";
 import { generateSSGHelper } from "~/server/api/helpers/ssgHelper";
 import { PageLayout } from "../components/layout";
 import { PostView } from "../components/postView";
-import { LoadingPage } from "../components/Loading";
+import { LoadingPage } from "../components/loading";
 
 const ProfileFeed = (props: {userId: string}) => {
     const {data, isLoading} = api.posts.getPostsByUserId.useQuery({

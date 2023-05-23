@@ -4,7 +4,7 @@ import { BiHomeSmile, BiBell } from 'react-icons/bi';
 import { GiHamburgerMenu } from 'react-icons/gi';
 import { IoMdPeople } from 'react-icons/io';
 import { TbMessageCircle } from 'react-icons/tb';
-import { LoadingSpinner } from "./Loading";
+import { LoadingSpinner } from "./loading";
 
 export const NavBar = () => {
   const { isLoaded: userLoaded, user , isSignedIn } = useUser();

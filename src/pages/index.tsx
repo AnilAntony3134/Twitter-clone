@@ -1,15 +1,15 @@
-import { SignInButton, useUser } from "@clerk/nextjs";
+import { useUser } from "@clerk/nextjs";
 import { type NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
 import { api } from "~/utils/api";
-import { LoadingPage, LoadingSpinner } from "~/components/Loading";
+import { LoadingPage, LoadingSpinner } from "~/components/loading";
 import { useState } from "react";
 import { toast } from "react-hot-toast";
 import { PageLayout } from "../components/layout";
 import { PostView } from "../components/postView";
 import { NavBar } from "~/components/navbar";
-import Leftfeed from "~/components/Leftfeed";
+import Leftfeed from "~/components/leftfeed";
 
 const CreatePostWizard = () => {
   const { user } = useUser()
@@ -108,7 +108,9 @@ const Home: NextPage = () => {
       </Head>
       <NavBar />
       <PageLayout>
-        <Leftfeed />
+        <div>
+          <Leftfeed />
+        </div>
         <Feed />
         <Feed />
       </PageLayout>
